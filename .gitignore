@@ -1,0 +1,11 @@
+/.DS_Store
+/.idea
+/.vscode
+/@mksl17.session
+/__pycache__
+/channel_messages.json
+/config.ini
+/eh.py
+/notebooks
+/task.txt
+/venv
