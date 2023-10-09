@@ -28,7 +28,7 @@ def start_bot():
 
 @bot.on.message(text="Начать")
 async def start_handler(message: Message):
-    await bot.state_dispenser.set(UserStates.MAIN)
+    await bot.state_dispenser.set(message.peer_id, UserStates.MAIN)
     await message.answer(
         "Привет! Наш бот позволяет вам читать все самые свежие новости в \
         мире. Для управления воспользуйтесь кнопками внизу.\n\
@@ -38,7 +38,7 @@ async def start_handler(message: Message):
 
 @bot.on.message(state=UserStates.MAIN, text="Последние новости")
 async def news_handler(message: Message):
-    await bot.state_dispenser.set(UserStates.LAST_NEWS)
+    await bot.state_dispenser.set(message.peer_id, UserStates.LAST_NEWS)
     await message.answer("Сколько новостей прислать? (1-10)")
 
 @bot.on.message(state=UserStates.LAST_NEWS, text="<amount>")
