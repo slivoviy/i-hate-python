@@ -59,16 +59,10 @@ def __find_by_keyword(keyword: str) -> list:
 def __read_objects(amount: int) -> list:
     objects = []
     with open(file_path, 'r') as file:
-        obj_str = ""
-        for line in islice(file, 1, 1 + 5 * amount):
-            line = line.strip()
-            if line.startswith('{'):
-                obj_str = line
-            elif line.endswith('},'):
-                obj_str += line[:-1]
-                obj = json.loads(obj_str)
-                objects.append(obj)
-                obj_str = ""
-            else:
-                obj_str += line
+        json_objects = json.load(file)
+        for o in json_objects:
+            if len(o['message']) > 0:
+                objects.append(o)
+            if len(objects) == amount:
+                break
     return objects

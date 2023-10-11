@@ -1,10 +1,10 @@
 from vkbottle import Keyboard, Text, KeyboardButtonColor
 
-START = (
+MAIN = (
     Keyboard(one_time=True, inline=False)
     .add(Text("Последние новости"))
     .row()
-    .add(Text("Новости"))
+    .add(Text("Новости по ключевому слову"))
     .row()
     .add(Text("Настроить рассылку новостей"))
     .get_json()

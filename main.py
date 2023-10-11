@@ -6,9 +6,9 @@ import controller
 
 
 def main():
-    # asyncio.run(news_parser.request_news())
+    asyncio.run(news_parser.request_news())
     controller.start_bot()
-    # update_news()
+    update_news()
 
 
 def update_news():
