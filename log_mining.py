@@ -1,9 +1,11 @@
+# This script is used in pm4py virtual environment to creat a log graph
+
 import pandas as pd
 import numpy as np
 
 df = pd.read_csv('log.csv') 
-df.columns = ['time:timestamp', 'mili', 'level', 'case:concept:name', 'concept:name']
-df = df.drop(['mili', 'level'], axis=1)
+df.columns = ['time:timestamp', 'milli', 'level', 'case:concept:name', 'concept:name']
+df = df.drop(['milli', 'level'], axis=1)
 
 df['time:timestamp'] = pd.to_datetime(df['time:timestamp'])  
 df['time:timestamp'] = df['time:timestamp'].astype(np.int64)
