@@ -39,6 +39,7 @@ class UserStates(StatesGroup):
     SUB_PERIOD = State()
     SUB_AMOUNT = State()
 
+
 @dp.message_handler(CommandStart())
 async def start_handler(message: types.Message, state: FSMContext):
     await state.set_state(UserStates.MAIN)
@@ -52,11 +53,13 @@ async def start_handler(message: types.Message, state: FSMContext):
     
     logger.info('Клиент находится в меню', extra={'user_id': message.from_user.id})
 
+
 @dp.message_handler(Text(equals="Последние новости"), state=UserStates.MAIN)
 async def news_handler(message: types.Message, state: FSMContext):
     logger.info('Клиент хочет получить последние новости', extra={'user_id': message.from_user.id})
     await state.set_state(UserStates.LAST_NEWS)
     await message.answer("Сколько новостей прислать? (1-10)")
+
 
 @dp.message_handler(lambda message: message.text.isdigit(), state=UserStates.LAST_NEWS)
 async def news_amount_handler(message: types.Message, state: FSMContext):
@@ -71,15 +74,18 @@ async def news_amount_handler(message: types.Message, state: FSMContext):
         logger.info('Клиент получил последние новости', extra={'user_id': message.from_user.id})
         logger.info('Клиент находится в меню', extra={'user_id': message.from_user.id})
 
+
 @dp.message_handler(lambda message: not message.text.isdigit(), state=UserStates.LAST_NEWS)
 async def news_amount_invalid_handler(message: types.Message):
     await message.answer("Я не понял тебя. Введи число от 1 до 10, пожалуйста.")
+
 
 @dp.message_handler(Text(equals="Новости по ключевому слову"), state=UserStates.MAIN)
 async def keyword_news_handler(message: types.Message, state: FSMContext):
     await state.set_state(UserStates.KEYWORD_NEWS)
     await message.answer("Введите ключевое слово, по которому провести поиск")
     logger.info('Клиент хочет получить новости по ключевому слову', extra={'user_id': message.from_user.id})
+
 
 @dp.message_handler(state=UserStates.KEYWORD_NEWS)
 async def news_search_handler(message: types.Message, state: FSMContext):
@@ -98,6 +104,7 @@ async def news_search_handler(message: types.Message, state: FSMContext):
         await state.set_state(UserStates.MAIN)
     logger.info('Клиент находится в меню', extra={'user_id': message.from_user.id})
 
+
 @dp.message_handler(Text(equals="Настроить рассылку новостей"), state=UserStates.MAIN)
 async def sub_settings_handler(message: types.Message, state: FSMContext):
     await state.set_state(UserStates.SUB_SETTINGS)
@@ -106,11 +113,13 @@ async def sub_settings_handler(message: types.Message, state: FSMContext):
     )
     logger.info('Клиент хочет настроить рассылку', extra={'user_id': message.from_user.id})
 
+
 @dp.message_handler(Text(equals="Период рассылки новостей"), state=UserStates.SUB_SETTINGS)
 async def sub_period_handler(message: types.Message, state: FSMContext):
     await state.set_state(UserStates.SUB_PERIOD)
     await message.answer("Выберите из списка ниже", reply_markup=keyboards.TIME_SETTINGS)
     logger.info('Клиент хочет настроить период рассылки', extra={'user_id': message.from_user.id})
+
 
 @dp.message_handler(Text(equals="Количество присылаемых новостей"), state=UserStates.SUB_SETTINGS)
 async def sub_amount_handler(message: types.Message, state: FSMContext):
@@ -137,6 +146,7 @@ async def sub_period_set_handler(message: types.Message, state: FSMContext):
 
     logger.info('Клиент находится в меню', extra={'user_id': message.from_user.id})
 
+
 @dp.message_handler(state=UserStates.SUB_AMOUNT)
 async def sub_amount_set_handler(message: types.Message, state: FSMContext):
     if not message.text.isdigit():
@@ -146,8 +156,6 @@ async def sub_amount_set_handler(message: types.Message, state: FSMContext):
         if not 1 <= amount <= 20:
             await message.reply("Я не понял тебя. Введи число от 1 до 20, пожалуйста.")
         else:
-            # Сохраняем количество новостей, например, в базе данных или state
-            # Здесь код для сохранения 'amount'
             
             await state.finish()
             await message.reply(
@@ -156,13 +164,13 @@ async def sub_amount_set_handler(message: types.Message, state: FSMContext):
             )
             logger.info('Клиент настроил количество новостей', extra={'user_id': message.from_user.id})
 
+
 @dp.message_handler(lambda message: message.text.isdigit(), state=UserStates.SUB_AMOUNT)
 async def sub_amount_set_handler(message: types.Message, state: FSMContext):
     amount = int(message.text)
     if not (1 <= amount <= 20):
         await message.answer("Я не понял тебя. Введи число от 1 до 20, пожалуйста.")
     else:
-        # Здесь должен быть код для сохранения настроенного количества новостей, возможно, в базу данных
         await state.set_state(UserStates.MAIN)
         await message.answer(
             f"Запомнил! Теперь буду присылать именно {amount} новост(ей).",
@@ -171,9 +179,11 @@ async def sub_amount_set_handler(message: types.Message, state: FSMContext):
         logger.info('Клиент настроил количество новостей', extra={'user_id': message.from_user.id})
         logger.info('Клиент находится в меню', extra={'user_id': message.from_user.id})
 
+
 @dp.message_handler(lambda message: not message.text.isdigit(), state=UserStates.SUB_AMOUNT)
 async def sub_amount_invalid_handler(message: types.Message):
     await message.answer("Я не понял тебя. Введи число от 1 до 20, пожалуйста.")
+
 
 if __name__ == '__main__':
     dp.run_polling(bot)
