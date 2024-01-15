@@ -21,3 +21,4 @@ def update_news():
 
 if __name__ == '__main__':
     main()
+

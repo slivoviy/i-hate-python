@@ -131,3 +131,4 @@ async def update_news():
 
 # with client:
 #     client.loop.run_until_complete(request_news())
+

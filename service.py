@@ -66,3 +66,4 @@ def __read_objects(amount: int) -> list:
             if len(objects) == amount:
                 break
     return objects
+
