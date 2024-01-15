@@ -1,37 +1,35 @@
-from vkbottle import Keyboard, Text, KeyboardButtonColor
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-MAIN = (
-    Keyboard(one_time=True, inline=False)
-    .add(Text("Последние новости"))
-    .row()
-    .add(Text("Новости по ключевому слову"))
-    .row()
-    .add(Text("Настроить рассылку новостей"))
-    .get_json()
-) 
-
-YES_NO = (
-    Keyboard(one_time=True, inline=False)
-    .add(Text("Да"), color=KeyboardButtonColor.POSITIVE)
-    .add(Text("Нет"), color=KeyboardButtonColor.NEGATIVE)
-    .get_json()
+# Основная клавиатура
+MAIN = ReplyKeyboardMarkup(resize_keyboard=True).add(
+    KeyboardButton("Последние новости")
+).row(
+    KeyboardButton("Новости по ключевому слову")
+).row(
+    KeyboardButton("Настроить рассылку новостей")
 )
 
-SUB_SETTINGS = (
-    Keyboard(one_time=True, inline=False)
-    .add(Text("Период рассылки новостей"))
-    .add(Text("Количество присылаемых новостей"))
-    .get_json()
+# Клавиатура с кнопками Да/Нет
+YES_NO = ReplyKeyboardMarkup(resize_keyboard=True).add(
+    KeyboardButton("Да"),
+    KeyboardButton("Нет")
 )
 
-TIME_SETTINGS = (
-    Keyboard(one_time=True, inline=False)
-    .add(Text("24 часа"))
-    .add(Text("12 часов"))
-    .row()
-    .add(Text("6 часов"))
-    .add(Text("2 часа"))
-    .row()
-    .add(Text("1 час"))
-    .get_json()
+# Клавиатура для настроек рассылки
+SUB_SETTINGS = ReplyKeyboardMarkup(resize_keyboard=True).add(
+    KeyboardButton("Период рассылки новостей")
+).add(
+    KeyboardButton("Количество присылаемых новостей")
+)
+
+# Клавиатура для настроек времени рассылки
+TIME_SETTINGS = ReplyKeyboardMarkup(resize_keyboard=True).add(
+    KeyboardButton("24 часа"),
+).add(
+    KeyboardButton("12 часов"),
+).row(
+    KeyboardButton("6 часов"),
+    KeyboardButton("2 часа"),
+).row(
+    KeyboardButton("1 час")
 )
